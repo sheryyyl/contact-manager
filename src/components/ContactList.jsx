@@ -1,25 +1,13 @@
 import PropTypes from 'prop-types';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import ContactItem from './ContactItem';
 
-const ContactList = ({ contactos, onContactClick }) => {
+const ContactList = ({ contacts, onContactClick }) => {
   return (
-    <div className="contact-list card border-0 mb-3 shadow-sm p-3">
+    <div className="contact-list card border-0 mb-3 shadow-sm p-3 mt-5">
       <h3 className="text-primary fw-bold mt-3 ps-2">Mis Contactos</h3>
       <ul className="list-group ps-2">
-        {contactos.map((contacto) => (
-          <li
-            key={contacto.id}
-            className="d-flex align-items-center gap-3 p-2 border-bottom hover-shadow mb-2"
-            style={{ transition: "background 0.3s", cursor: "pointer" }}
-            onClick={() => onContactClick(contacto)}
-          >
-            <div className="icon-placeholder" style={{ width: "30px", height: "30px", backgroundColor: "#ddd", borderRadius: "50%" }}></div>
-            <div className="d-flex flex-column flex-grow-1">
-              <p className="mb-0 fw-bold">{contacto.nombre}</p>
-              <p className="mb-0 text-secondary">{contacto.telefono}</p>
-            </div>
-            <p className="mb-0 text-secondary text-end">{contacto.correo}</p>
-          </li>
+        {contacts.map((contact, index) => (
+          <ContactItem key={index} contact={contact} onClick={() => onContactClick(contact)} />
         ))}
       </ul>
     </div>
@@ -27,12 +15,12 @@ const ContactList = ({ contactos, onContactClick }) => {
 };
 
 ContactList.propTypes = {
-  contactos: PropTypes.arrayOf(
+  contacts: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      nombre: PropTypes.string.isRequired,
-      telefono: PropTypes.string.isRequired,
-      correo: PropTypes.string.isRequired,
+      fullname: PropTypes.string.isRequired,
+      phonenumber: PropTypes.string.isRequired,
+      email: PropTypes.string.isRequired,
+      type: PropTypes.string.isRequired,
     })
   ).isRequired,
   onContactClick: PropTypes.func.isRequired,
