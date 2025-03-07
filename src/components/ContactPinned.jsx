@@ -9,7 +9,7 @@ const ContactPinned = ({ contact, onClear }) => {
         <div className="card p-3 bg-light border-0 shadow-lg rounded-3">
           <div className="mb-0 fw-bold">Name: {contact.fullname}</div>
           <div>Email: {contact.email}</div>
-          <div>Phone: {contact.phonenumber}</div>
+          <div>Phone: 📞 {contact.phonenumber} </div>
           <div>Type: {contact.type}</div>
           <button className="btn btn-danger mt-3" onClick={onClear}>Limpiar</button>
         </div>

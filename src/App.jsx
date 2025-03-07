@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import Header from './components/Header';
 import ContactList from './components/ContactList';
 import ContactPinned from './components/ContactPinned';
+import ContactForm from './components/ContactForm';
 import data from './data/contacts.json';
 
 const App = () => {
@@ -26,6 +27,10 @@ const App = () => {
     setSelectedContact(null);
   };
 
+  const handleAddContact = (newContact) => {
+    setContacts((prevContacts) => [...prevContacts, newContact]);
+  };
+
   return (
     <>
       <Header />
@@ -33,22 +38,22 @@ const App = () => {
         <div className="row">
           <div className="col-md-4">
             <ContactPinned contact={selectedContact} onClear={clearSelectedContact} />
+            <hr className="my-5" />
+            <div className="mt-5">
+              <h5>Historial de Contactos Seleccionados</h5>
+              <ul className="list-group">
+                {contactHistory.map((contact, index) => (
+                  <li key={index} className="list-group-item">
+                    {contact.fullname} - 📞 {contact.phonenumber}  {contact.email} - {contact.type}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
           <div className="col-md-8">
             <ContactList contacts={contacts} onContactClick={handleContactClick} selectedContact={selectedContact} />
-
           </div>
-          <div className="mt-4 p-4 shadow-sm">
-            <h5 className="fw-bold">Historial de Contactos Seleccionados</h5>
-            <ul className="list-group">
-              {contactHistory.map((contact, index) => (
-                <li key={index} className="list-group-item">
-                  <span className="fw-bold"> Contacto: {contact.fullname}</span> - {contact.email}
-                </li>
-              ))}
-            </ul>
-          </div>
-
+          <ContactForm onAddContact={handleAddContact} />
         </div>
       </div>
     </>
