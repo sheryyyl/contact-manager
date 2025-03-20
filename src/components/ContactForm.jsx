@@ -1,76 +1,78 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 
-const ContactForm = ({ onAddContact }) => {
+const ContactForm = ({ onAddContact, saveContact }) => {
   const [fullname, setFullname] = useState('');
   const [phonenumber, setPhonenumber] = useState('');
   const [email, setEmail] = useState('');
-  const [type, setType] = useState('');
+  const [type, setType] = useState('familia');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newContact = { fullname, phonenumber, email, type };
-    onAddContact(newContact);
+    await saveContact(newContact);
     setFullname('');
     setPhonenumber('');
     setEmail('');
-    setType('');
+    setType('familia');
   };
 
   return (
-    <div className="card shadow-sm mt-5 mx-auto" style={{ maxWidth: '500px' }}>
-      <div className="card-body">
-        <h5 className="card-title">Agregar Nuevo Contacto</h5>
-        <form onSubmit={handleSubmit} className="contact-form">
-          <div className="mb-3">
-            <label className="form-label">Full Name</label>
-            <input
-              type="text"
-              className="form-control"
-              value={fullname}
-              onChange={(e) => setFullname(e.target.value)}
-              required
-            />
-          </div>
-          <div className="mb-3">
-            <label className="form-label">Phone Number</label>
-            <input
-              type="text"
-              className="form-control"
-              value={phonenumber}
-              onChange={(e) => setPhonenumber(e.target.value)}
-              required
-            />
-          </div>
-          <div className="mb-3">
-            <label className="form-label">Email</label>
-            <input
-              type="email"
-              className="form-control"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div className="mb-3">
-            <label className="form-label">Type</label>
-            <input
-              type="text"
-              className="form-control"
-              value={type}
-              onChange={(e) => setType(e.target.value)}
-              required
-            />
-          </div>
-          <button type="submit" className="btn btn-dark mb-3">Guardar</button>
-        </form>
-      </div>
+    <div className="contact-list card border-0 mb-3 shadow-sm p-3 mt-5">
+      <h3 className="fw-bold mt-3 ps-2">Formulario de Contacto</h3>
+      <form onSubmit={handleSubmit}>
+        <div className="mb-3">
+          <label className="form-label">Nombre Completo</label>
+          <input
+            type="text"
+            className="form-control"
+            value={fullname}
+            onChange={(e) => setFullname(e.target.value)}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label className="form-label">Número Telefónico</label>
+          <input
+            type="text"
+            className="form-control"
+            value={phonenumber}
+            onChange={(e) => setPhonenumber(e.target.value)}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label className="form-label">Correo Electrónico</label>
+          <input
+            type="email"
+            className="form-control"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label className="form-label">Tipo</label>
+          <select
+            className="form-select"
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+            required
+          >
+            <option value="familia">Familia</option>
+            <option value="social">Social</option>
+            <option value="trabajo">Trabajo</option>
+          </select>
+        </div>
+        <button type="submit" className="btn btn-primary">Guardar Contacto</button>
+      </form>
     </div>
   );
 };
 
 ContactForm.propTypes = {
   onAddContact: PropTypes.func.isRequired,
+  saveContact: PropTypes.func.isRequired,
 };
 
 export default ContactForm;
