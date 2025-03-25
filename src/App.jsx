@@ -1,7 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Header from './components/Header';
 import ContactList from './components/ContactList';
-import ContactPinned from './components/ContactPinned';
 import ContactForm from './components/ContactForm';
 
 const App = () => {
@@ -27,7 +26,7 @@ const App = () => {
     setContacts((prevContacts) => [...prevContacts, newContact]);
   };
 
-  const fetchContacts = async () => {
+  const fetchData = async () => {
     const apiUrl = import.meta.env.VITE_API_URL;
     setIsLoading(true);
     setErrorMessage('');
@@ -39,11 +38,20 @@ const App = () => {
       const data = await response.json();
       setContacts(data);
     } catch (error) {
-      setErrorMessage('Error al cargar contactos');
+      console.error('Error fetching data:', error);
+      if (error.message === 'Failed to fetch') {
+        setErrorMessage('Error de conexión: No se pudo conectar con la API');
+      } else {
+        setErrorMessage('Error al cargar contactos');
+      }
     } finally {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const saveContact = async (data) => {
     const apiUrl = import.meta.env.VITE_API_URL;
@@ -71,23 +79,11 @@ const App = () => {
       <div className="container mt-5">
         <div className="row">
           <div className="col-md-4 mt-5">
-            {/* <ContactPinned contact={selectedContact} onClear={clearSelectedContact} />
-            <hr className="my-5" />
-            <div className="mt-5">
-              <h5>Historial de Contactos Seleccionados</h5>
-              <ul className="list-group">
-                {contactHistory.map((contact, index) => (
-                  <li key={index} className="list-group-item">
-                    {contact.fullname} - 📞 {contact.phonenumber}  {contact.email} - {contact.type}
-                  </li>
-                ))}
-              </ul>
-            </div> */}
             <ContactForm onAddContact={handleAddContact} saveContact={saveContact} />
           </div>
           <div className="col-md-8">
             <div className="d-flex justify-content-center pt-5">
-              <button onClick={fetchContacts} disabled={isLoading} className="btn btn-dark">
+              <button onClick={fetchData} disabled={isLoading} className="btn btn-dark">
                 {isLoading ? 'Loading...' : 'Fetch Contacts'}
               </button>
             </div>
@@ -95,7 +91,7 @@ const App = () => {
               <div className="mt-3">
                 <p style={{ color: 'red' }}>{errorMessage}</p>
                 <div className="d-flex justify-content-center">
-                  <button onClick={fetchContacts} disabled={isLoading} className="btn btn-dark">
+                  <button onClick={fetchData} disabled={isLoading} className="btn btn-dark">
                     {isLoading ? 'Loading...' : 'Reintentar'}
                   </button>
                 </div>
